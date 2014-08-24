@@ -1,0 +1,54 @@
+
+public class TestATM {
+	
+	/* 
+	 * Commands
+	 * L - login
+	 * W - Withdraw
+	 * D - Deposit
+	 * C - Check Balance
+	 * O - Logout
+	 */
+	
+	public static void main(String[] args) {
+		String commands = "L, D, W, O, W";
+		int currentBalance = 100;
+		int bal = findBalance(commands, currentBalance);
+		System.out.println(bal);
+	}
+	
+	public static int findBalance(String commands, int currentBalance){
+		
+		String []cmds = commands.split(",");
+		
+		int balance = currentBalance;
+		boolean isLogin = false;
+		boolean isLoggedOut = false;
+		
+		for(int i = 0; i < cmds.length; i++){
+			String currentCommand = cmds[i].trim();
+			
+			if(currentCommand.equalsIgnoreCase("L")){
+				isLogin = true;
+			} else if(currentCommand.equalsIgnoreCase("W")){
+				if(isLogin && !isLoggedOut && balance > 50){
+					balance = balance - 10;
+				}
+			} else if(currentCommand.equalsIgnoreCase("D")){
+				if(isLogin && !isLoggedOut){
+					balance = balance + 10;
+				}
+			} else if(currentCommand.equalsIgnoreCase("C")){
+				if(isLogin && !isLoggedOut){
+					System.out.println("Balance is: " + balance);
+				}
+			} else if(currentCommand.equalsIgnoreCase("O")){
+				isLoggedOut = true;
+			}
+		}
+		return balance;
+	}
+	
+	
+
+}
