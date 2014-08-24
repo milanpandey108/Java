@@ -1,0 +1,79 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
+
+
+public class Movie{
+	
+	public static void main(String[] args) {
+
+        int[] a = {0,10, 9,12,11, 9,13,15,18};
+        int[] b = {3,11,11,14,13,10,15,16,0};
+    
+//		int[] a = {4, 1, 5, 7, 1};
+//      int[] b = {4, 7, 8, 8, 8};
+        
+//      int[] a = {6, 7, 0, 4, 8, 4,  5};
+//      int[] b = {6, 9, 10, 5, 9, 10, 7};
+//        
+        
+        System.out.println("Total Movie watch" + MovieCount(a,b));
+    
+    }
+
+	
+	public static int MovieCount(int[] sTs, int[] eTs){
+		int movieCount = 0;
+		
+		TreeMap<Integer, Integer> Ts = new TreeMap<Integer, Integer>(); 
+		
+		for(int i = 0; i < sTs.length; i++){
+			//don't consider invalid shows.
+			if(sTs[i] == eTs[i]){
+				continue;
+			}
+			//Check if end time is already present, if present and greater than this, replace.
+			if(Ts.containsKey(sTs[i])){
+				if(Ts.get(sTs[i]) > eTs[i]){
+					Ts.put(sTs[i], eTs[i]);
+				}
+			} else {
+				Ts.put(sTs[i], eTs[i]);
+			}
+		}
+		
+		ArrayList<Integer> sizes = new ArrayList<Integer>();
+		//Iterate the Map, to get all movies for each start time.
+		Iterator it = Ts.entrySet().iterator();
+			while(it.hasNext()){
+				sizes.add(getMovieCount(Ts));
+				it.next();
+				it.remove();
+			}
+		
+		movieCount = Collections.max(sizes);
+		
+		return movieCount;
+	}
+	
+	//This method returns the no of movies can be watched in the given map.
+	static int getMovieCount(Map<Integer, Integer> movies) {
+		int count = 0;
+		int startTime = 0;
+		int endTime = 0;
+		int previousTime = 0;
+
+		for(Map.Entry<Integer, Integer> entry : movies.entrySet()){
+			startTime = entry.getKey();
+			endTime = entry.getValue();
+			if(startTime >= previousTime){
+				count++;
+				previousTime = endTime;
+			}
+		}
+		return count;
+	}
+
+}
